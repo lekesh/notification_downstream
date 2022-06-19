@@ -1,3 +1,4 @@
+import os
 import base64
 from datetime import date
 from google.cloud import storage
@@ -9,7 +10,6 @@ def upload_blob(bucket_name, contents, destination_blob_name):
     blob.upload_from_string(contents)
 
 def email(content):
-    import os
     from sendgrid import SendGridAPIClient
     from sendgrid.helpers.mail import Mail, Email
     from python_http_client.exceptions import BadRequestsError
@@ -21,8 +21,8 @@ def email(content):
         exit()
     
     message = Mail(
-        to_emails = ["lekesh.kumar@searce.com"],
-        from_email = Email(email='lekeshkumar2000@gmail.com', name="Your name"),
+        to_emails = os.environ['TO_EMAIL'],
+        from_email = Email(email=os.environ['FROM_EMAIL'], name=os.environ['FROM_NAME']),
         subject = "Pubsub Message {}".format(date.today()),
         plain_text_content = content
     )
@@ -39,5 +39,5 @@ def email(content):
 def hello_pubsub(event, context):
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
     obj_name = "pubsub_message_{}".format(date.today())
-    upload_blob("lekesh_test", pubsub_message, obj_name)
+    upload_blob(os.environ['BUCKET'], pubsub_message, obj_name)
     email(pubsub_message)

@@ -3,3 +3,7 @@
 
 ### Setup
 #### export EMAIL_API_KEY='your-email-api-key'
+#### export TO_EMAIL='recipient-email-id'
+#### export FROM_EMAIL='sender-email-id'
+#### export FROM_NAME='sender-name'
+#### export BUCKET='source-bucket-name'
